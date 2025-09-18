@@ -1,34 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { useClickOutside } from "./hooks/use-click-outside";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [opened, setOpened] = useState(false);
+  const ref = useClickOutside(() => setOpened(false));
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div style={{ position: "relative", display: "inline-block" }}>
+      <button onClick={() => setOpened(true)} style={{ position: "relative", zIndex: 1 }}>Open</button>
+      {/* かぶせるdiv。openedがtrueのときbuttonの上に重ねる */}
+      {opened && (
+        <div
+          ref={ref}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "white",
+            color: "black",
+            border: "1px solid black",
+            padding: 20,
+            zIndex: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          Click outside to close
+        </div>
+      )}
+    </div>
   )
 }
 
