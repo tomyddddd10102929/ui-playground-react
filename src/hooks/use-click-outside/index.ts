@@ -5,7 +5,7 @@ const DEFAULT_EVENTS = ["mousedown", "touchstart"];
 export function useClickOutside<T extends HTMLElement = any>(
   callback: () => void,
   events?: string[] | null,
-  nodes?: (HTMLElement | null)[]        
+  nodes?: (HTMLElement | null)[]
 ) {
   const ref = useRef<T>(null);
   const eventsList = events || DEFAULT_EVENTS;
