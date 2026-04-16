@@ -1,38 +1,40 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./App.css";
-import { useClickOutside } from "./hooks/use-click-outside";
+import { Sidebar } from "./components/sidebar/Sidebar";
 
 function App() {
-  const [opened, setOpened] = useState(false);
-  const ref = useClickOutside(() => setOpened(false));
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
-      <button onClick={() => setOpened(true)} style={{ position: "relative", zIndex: 1 }}>Open</button>
-      {/* かぶせるdiv。openedがtrueのときbuttonの上に重ねる */}
-      {opened && (
-        <div
-          ref={ref}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            background: "white",
-            color: "black",
-            border: "1px solid black",
-            padding: 20,
-            zIndex: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}
+    <>
+      <header className="app-header">
+        <button
+          ref={hamburgerRef}
+          className="hamburger"
+          onClick={() => setSidebarOpen((prev) => !prev)}
+          aria-label="メニュー"
         >
-          Click outside to close
-        </div>
-      )}
-    </div>
-  )
+          <span className="hamburger-icon">
+            <span />
+            <span />
+            <span />
+          </span>
+        </button>
+      </header>
+
+      <Sidebar
+        opened={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        excludeNodes={[hamburgerRef.current]}
+      />
+
+      <main className="app-main">
+        <h1>Main Content</h1>
+        <p>サイドバーはハンバーガーメニューから開閉できます。</p>
+      </main>
+    </>
+  );
 }
 
 export default App
